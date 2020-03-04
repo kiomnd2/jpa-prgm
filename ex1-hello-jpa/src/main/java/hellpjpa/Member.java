@@ -10,6 +10,16 @@ public class Member {
     private Long id;
     private String name;
 
+
+    //엔티티 정의시 기본 생성자가 필요함
+    public Member() {
+    }
+
+    public Member(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }
