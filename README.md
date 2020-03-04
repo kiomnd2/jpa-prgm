@@ -101,3 +101,61 @@
     * 영속 상태의 엔티티가 영속성 컨텍스트에서 분리
     * 영속성 컨텍스트가 제공하는 기능을 사용 못함
 
+### 6. 엔티티 매핑
+* 엔티티 매핑 소개
+    * 객체와 테이블 매핑 : @Entity, @Table
+        * @Entity 가 붙은 클래스는 JPA가 관리, 엔티티라 한다.
+        * 기본생성자 필수 (파라미터 없는 생성자)
+        * final 클래스 enum, interface, inner 클래스 사용X 
+        * 저장할 필드에 final 사용 X 
+        * Table은 엔티티와 매핑할 테이블 지정
+    * 필드와 컬럼 매핑 : @Column
+    * 기본키 매핑 : @Id
+    * 연관관계 매핑 : @ManyToOne, @JoinColumn
+* 데이터베이스 스키마 자동 생성 ()
+    * DDL을 애플리케이션 실행 시점에 자동 생성
+    * 테이블중싱- > 객체 중심
+    * 데이터베이스 방언을 활용, 대이터베이스에 맞는 적설한 DDL 생성
+    * 이렇게 생성된 DDL 은 개발에서만 사용
+    * <property name="hibernate.hbm2ddl.auto" value="create"/>
+        * 애플리케이션 로딩 시점에 엔티티가 매핑되 있는 테이블에 대해 지우고 다시 테이블을 생성, 없으면 생성
+        * value = create-drop 시 .. 애플리케이션 종료 시점에 테이블을 드랍
+        * value = update 시 alter table
+        * value = validate 기존 테이블과 엔티티 테이블이 일치하는지만 확인
+        * value = none 
+    * 제약조건 추가가능
+* 필드와 칼럼 매핑
+    * Column : 칼럼매핑
+        * name : 필드와 맾핑할 테이블의 칼럼 이름
+        * insertable, updatable : 등록,변경 가능 여부
+        * nullable(DDL) : null 값의 허용 여부를 설정
+        * unique : 유니크 제약조건. 잘 안씀, 다만 유니크 값을 랜덤값이라 실질적으로 잘 안쓰임
+        * columnDefinition : 칼럼 정의를 직접 (varcahr(100) default 'EMPTY' ) 해당 내용이 그대로 ddl 문에 들어감
+        * length : 길이 제약 조건
+    * Transient : 해당 필드를 DB와 매핑 하지 않음
+    * temporal : 날짜매핑
+        * DB의 날짜정보 매핑 일반적으로 안씀
+        * LocalDate나 LocalDateTime 쓸경우 불필요..
+    * LOB: 대량 데이터 매핑
+        * 문자 매핑시 CLOB, 나머지는 BLOB으로 매핑됨
+    * Enumerated : enum 매핑
+        * ORDINAL : enum 의 순서를 데이터베이스에 저장 (기본값) // 위험 사용 금지
+        * STRING : enum 이름을 데이터베이스에 저장 
+* 기본키 매핑
+    * @ID : 직접 할당
+    * @GeneratedValue (strategy)  //키생성
+        * IDENTITY : 데이터베이스에 위임
+            * 기본키 생성을 데이터베이스에 위임
+            * em.persist()시점에 즉시 sql을 수행하고 db에서 식별자를 조회
+        * SEQUENCE : 데이터베이스 시퀀스 
+            * em.persist()시점에 SEQ를 조회
+            * 시퀀스 한번 호출에 증가하는 수 ( 성능 최적화에 사용 )
+        * TABLE : 키 생성요 테이블 사용 @TableGenerator 필요
+            * 키생성 전용 테이블을 생성함
+            * 장점 : 모든 데이터베이스에 적용가능
+            * 단점 : 성능
+        * AUTO: 방언에 따라 자동지정
+    * 권장하는 식별자 전략
+        * 기본키 제약조건 : null 아님 유일 변하면 안됨
+        * 권장 : long + 대체키 + 키 생성전략 사용
+    
