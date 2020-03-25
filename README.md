@@ -340,3 +340,22 @@
     * 조회시 지연 로딩 전략 사용
     * 값 타입 컬렉션에 변경 사항이 발생하면, 주인 엔티티와 연관된 모든 데이터를 삭제하고, 값 타입 컬렉션에 있는 현재 값을 모두 다시 저장한다.
     * 실무에서는 상황에 따라 값타입 컬렉션 대신에 일대다 관계를 고려
+* 결과 조회 API 
+    * query.getResultList() : 결과가 하나 이상일 때, 리스트 반환
+    * query.getSingleResult() : 결과가 정확히 하나, 단일 객체 반환
+        * 결과가 없으면 : NoResultException
+        * 둘 이상이면 : NoUnique
+* 프로젝션
+    * Select 절에 조회할 대상을 지정하는 것
+    * 프로젝션 대상 : 엔티티 , 임베디드 타입, 스칼라 타입
+    * Select * From Member m -> 엔티티 프로젝션
+    * Select m.team From member m -> 엔티티 프로젝션
+    * Select m.username, m.age From member m -> 스칼라 타입 프로젝션
+    * Distinct 로 중복 제거
+* 프로젝션 - 여러 값 조회
+    1. Query 타입으로 조회
+    2. Object[] 타입으로 조회
+    3. new 명령어로 조회
+        * 단순 값을 DTO로 바로 조회
+        Select new jpabook.jpql.UserDTO From Member m
+    
