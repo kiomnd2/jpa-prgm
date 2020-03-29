@@ -358,4 +358,41 @@
     3. new 명령어로 조회
         * 단순 값을 DTO로 바로 조회
         Select new jpabook.jpql.UserDTO From Member m
-    
+* 페이징 
+    * setFirstResult : 조회 시작 위치
+    * setMaxResult : 조회할 데이터 수
+* 조인
+    * 내부조인 : SELECT m From Member m [Inner] join m.team †
+    * 외부 조인 : Select m From Member m LEFT  JOIN m.team t
+    * 세타 조인 : select count(m) from Member m, Team t where m.username = t.name
+* 조인 - on 
+    * 조인 대상 필터링
+* 서브쿼리
+    * 나이가 ㅂ평균보다 많은 회원 : selelct m from Member m where m.age > (select avg(m2.age) from Memeber m2)
+    * 한 건이라도 주문한 고객 : select m from Member m where (select count(0) rom Order o where m = o.member)
+    * 서브쿼리 지원 함수
+        * Exist, all , any
+* 조건식 -CASE식 
+    * 기본 CASE식 
+    ~~~
+        select
+            case when m.age <= 10 then ' 학생요근
+            else '일반요금'
+            end
+    ~~~
+    * 단순 CASE 식
+    ~~~
+        select
+            case t.name 
+                when '팀A' then '인센티브110%'
+                when '팀B' then '인센티브120%'
+            else '인센티브105%'
+            end
+        from team
+    ~~~
+    * COALESCE : 하나씩 조회해서 null이 아니면 출력
+    * NULLIF : 두 값이 같으면 null반환, 다르면 첫번째 값 반환
+* JPQL 기본 함수
+    * CONCAT, SUBSTRING, TRIM, LOWER,UPPER, LENGTH, LOCATE, ABS,SQRT,MOD, SIZE, INDEX
+* 사용자 정의 함수
+    * 하이버네이트는 
